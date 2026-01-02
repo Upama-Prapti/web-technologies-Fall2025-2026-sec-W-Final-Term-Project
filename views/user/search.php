@@ -1,0 +1,73 @@
+<?php
+require_once __DIR__ . '/../../components/like_post.php';
+if(!isset($posts)) $posts = [];
+if(!isset($user_id)) $user_id = '';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Search</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+   <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/style.css">
+</head>
+<body>
+
+<?php include __DIR__ . '/../../components/user_header.php'; ?>
+
+<?php
+   if(isset($_POST['search_box']) OR isset($_POST['search_btn'])){
+?>
+<section class="posts-container">
+   <div class="box-container">
+      <?php
+         if(!empty($posts)){
+            foreach($posts as $fetch_posts){
+               $post_id = $fetch_posts['id'];
+      ?>
+      <form class="box" method="post">
+         <input type="hidden" name="post_id" value="<?= $post_id; ?>">
+         <input type="hidden" name="admin_id" value="<?= $fetch_posts['admin_id']; ?>">
+         <div class="post-admin">
+            <i class="fas fa-user"></i>
+            <div>
+               <a href="index.php?route=author&author=<?= $fetch_posts['name']; ?>"><?= $fetch_posts['name']; ?></a>
+               <div><?= $fetch_posts['date']; ?></div>
+            </div>
+         </div>
+         
+         <?php if($fetch_posts['image'] != ''){ ?>  
+         <img src="<?php echo BASE_URL . UPLOADED_IMG_URL . $fetch_posts['image']; ?>" class="post-image" alt="">
+         <?php } ?>
+         
+         <div class="post-title"><?= $fetch_posts['title']; ?></div>
+         <div class="post-content content-150"><?= substr($fetch_posts['content'], 0, 150); ?>...</div>
+         <a href="index.php?route=post&post_id=<?= $post_id; ?>" class="inline-btn">read more</a>
+         <a href="index.php?route=category&category=<?= $fetch_posts['category']; ?>" class="post-cat"> <i class="fas fa-tag"></i> <span><?= $fetch_posts['category']; ?></span></a>
+         <div class="icons">
+            <a href="index.php?route=post&post_id=<?= $post_id; ?>"><i class="fas fa-comment"></i><span>(<?= $fetch_posts['comments_count']; ?>)</span></a>
+            <button type="submit" name="like_post"><i class="fas fa-heart" style="<?php if($fetch_posts['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $fetch_posts['likes_count']; ?>)</span></button>
+         </div>
+      </form>
+      <?php
+            }
+         }else{
+            echo '<p class="empty">no result found!</p>';
+         }
+      ?>
+   </div>
+</section>
+
+<?php
+   }else{
+      echo '<section><p class="empty">search something!</p></section>';
+   }
+?>
+   
+<?php include __DIR__ . '/../../components/footer.php'; ?>
+<script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
+</body>
+</html>
+
