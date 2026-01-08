@@ -17,53 +17,50 @@ class PostController {
         $this->commentModel = new CommentModel($conn);
         $this->likeModel = new LikeModel($conn);
     }
+    function post_home() {
+    global $conn;
+    $user_id = $_SESSION['user_id'] ?? '';
     
-    public function home() {
-        global $conn;
-        $user_id = $_SESSION['user_id'] ?? '';
-        
-        // Get user profile if logged in
-        $fetch_profile = null;
-        $total_user_comments = 0;
-        $total_user_likes = 0;
-        if($user_id) {
-            require_once __DIR__ . '/../models/UserModel.php';
-            $userModel = new UserModel($conn);
-            $fetch_profile = $userModel->getUserById($user_id);
-            if($fetch_profile) {
-                $total_user_comments = count($this->commentModel->getCommentsByUser($user_id));
-                $total_user_likes = count($this->likeModel->getLikesByUser($user_id));
-            }
+    $postModel = new PostModel($conn);
+    $commentModel = new CommentModel($conn);
+    $likeModel = new LikeModel($conn);
+    
+    $fetch_profile = null;
+    $total_user_comments = 0;
+    $total_user_likes = 0;
+    if($user_id) {
+        require_once __DIR__ . '/../models/UserModel.php';
+        $userModel = new UserModel($conn);
+        $fetch_profile = $userModel->getUserById($user_id);
+        if($fetch_profile) {
+            $total_user_comments = count($commentModel->getCommentsByUser($user_id));
+            $total_user_likes = count($likeModel->getLikesByUser($user_id));
         }
-        
-        // Get authors - from both admin table and posts table (to include all authors who have posted)
-        $authors = [];
-        
-        // Get distinct author names from posts table (includes both admin and user posts)
-        $authors_result = $conn->query("SELECT DISTINCT name FROM `posts` WHERE status = 'active' ORDER BY name ASC");
-        while($row = $authors_result->fetch_assoc()) {
-            if(!in_array($row['name'], $authors)){
-                $authors[] = $row['name'];
-            }
-        }
-        
-        // Limit to 20 authors for sidebar display
-        $authors = array_slice($authors, 0, 20);
-        
-        // Get posts
-        $posts = $this->postModel->getPostsByStatus('active', 6);
-        
-        // Get post stats
-        foreach($posts as &$post) {
-            $post['comments_count'] = count($this->commentModel->getCommentsByPost($post['id']));
-            $post['likes_count'] = $this->likeModel->getLikeCount($post['id']);
-            $post['has_liked'] = $user_id ? $this->likeModel->hasLiked($user_id, $post['id']) : false;
-        }
-        
-        require_once __DIR__ . '/../components/like_post.php';
-        include __DIR__ . '/../views/user/home.php';
     }
     
+    $authors = [];
+    
+    $authors_result = $conn->query("SELECT DISTINCT name FROM `posts` WHERE status = 'active' ORDER BY name ASC");
+    while($row = $authors_result->fetch_assoc()) {
+        if(!in_array($row['name'], $authors)){
+            $authors[] = $row['name'];
+        }
+    }
+    
+    $authors = array_slice($authors, 0, 20);
+    
+    $posts = $postModel->getPostsByStatus('active', 6);
+    
+    foreach($posts as &$post) {
+        $post['comments_count'] = count($commentModel->getCommentsByPost($post['id']));
+        $post['likes_count'] = $likeModel->getLikeCount($post['id']);
+        $post['has_liked'] = $user_id ? $likeModel->hasLiked($user_id, $post['id']) : false;
+    }
+    
+    require_once __DIR__ . '/../components/like_post.php';
+    include __DIR__ . '/../views/user/home.php';
+}
+
     public function allPosts() {
         $user_id = $_SESSION['user_id'] ?? '';
         
