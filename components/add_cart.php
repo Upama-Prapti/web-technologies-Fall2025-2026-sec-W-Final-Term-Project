@@ -1,34 +1,34 @@
 <?php
-
 if(isset($_POST['add_to_cart'])){
 
+   $user_id = $_SESSION['user_id'] ?? '';
+   
    if($user_id == ''){
-      header('location:login.php');
+      header('location:index.php?route=login');
+      exit;
    }else{
+      global $conn;
+      
+      $pid = intval($_POST['pid']);
+      $name = trim($_POST['name']);
+      $price = floatval($_POST['price']);
+      $image = trim($_POST['image']);
+      $qty = intval($_POST['qty']);
 
-   $pid = $_POST['pid'];
-   $pid = filter_var($pid, FILTER_SANITIZE_STRING);
-   $name = $_POST['name'];
-   $name = filter_var($name, FILTER_SANITIZE_STRING);
-   $price = $_POST['price'];
-   $price = filter_var($price, FILTER_SANITIZE_STRING);
-   $image = $_POST['image'];
-   $image = filter_var($image, FILTER_SANITIZE_STRING);
-   $qty = $_POST['qty'];
-   $qty = filter_var($qty, FILTER_SANITIZE_STRING);
+      $stmt = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND name = ?");
+      $stmt->bind_param("is", $user_id, $name);
+      $stmt->execute();
+      $result = $stmt->get_result();
 
-   $check_cart_numbers = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND name = ?");
-   $check_cart_numbers->execute([$user_id, $name]);
-
-   if($check_cart_numbers->rowCount() > 0){
-      $message[] = 'already addded to cart!';
-   }else{
-      $insert_cart = $conn->prepare("INSERT INTO `cart`(user_id, pid, name, price, quantity, image) VALUES(?,?,?,?,?,?)");
-      $insert_cart->execute([$user_id, $pid, $name, $price, $qty, $image]);
-      $message[] = 'added to cart!';
+      if($result->num_rows > 0){
+         $message[] = 'already added to cart!';
+      }else{
+         $stmt = $conn->prepare("INSERT INTO `cart`(user_id, pid, name, price, quantity, image) VALUES(?,?,?,?,?,?)");
+         $stmt->bind_param("iisdis", $user_id, $pid, $name, $price, $qty, $image);
+         if($stmt->execute()){
+            $message[] = 'added to cart!';
+         }
+      }
    }
 }
-
-}
-
 ?>
