@@ -1,9 +1,9 @@
 <?php
 if(isset($message)){
-   foreach($message as $message){
+   foreach($message as $msg){
       echo '
       <div class="message">
-         <span>'.$message.'</span>
+         <span>'.$msg.'</span>
          <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
       </div>
       ';
@@ -51,9 +51,9 @@ if(isset($message)){
                $stmt->execute();
                $result = $stmt->get_result();
                if($result->num_rows > 0){
-                  $fetch_profile = $result->fetch_assoc();
+                  $header_profile = $result->fetch_assoc();
          ?>
-         <p class="name"><?= $fetch_profile['name']; ?></p>
+         <p class="name"><?= $header_profile['name']; ?></p>
          <a href="index.php?route=update" class="btn">update profile</a>
          <a href="index.php?route=logout" onclick="return confirm('logout from this website?');" class="delete-btn">logout</a>
          <?php
