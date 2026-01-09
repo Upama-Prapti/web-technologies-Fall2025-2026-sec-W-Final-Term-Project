@@ -17,10 +17,22 @@ if(!isset($message)) $message = [];
 
 <section class="form-container">
    <form action="index.php?route=admin&action=register_admin" method="POST">
-      <h3>register new</h3>
-      <input type="text" name="name" maxlength="20" required placeholder="enter your username" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="pass" maxlength="20" required placeholder="enter your password" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="cpass" maxlength="20" required placeholder="confirm your password" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <h3>register new admin</h3>
+      
+      <?php
+      if(!empty($message)){
+         foreach($message as $msg){
+            $bg_color = (strpos($msg, 'registered') !== false) ? '#28a745' : '#dc3545';
+            echo '<div class="message" style="background: '.$bg_color.'; color: white; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem; text-align: center; font-size: 1.4rem;">
+               <span>'.$msg.'</span>
+            </div>';
+         }
+      }
+      ?>
+      
+      <input type="text" name="name" maxlength="50" required placeholder="enter username" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="pass" maxlength="50" required placeholder="enter password (min 8 characters)" class="box" minlength="8" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="cpass" maxlength="50" required placeholder="confirm password" class="box" minlength="8" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="submit" value="register now" name="submit" class="btn">
    </form>
 </section>
@@ -28,4 +40,3 @@ if(!isset($message)) $message = [];
 <script src="<?php echo ASSETS_URL; ?>js/admin_script.js"></script>
 </body>
 </html>
-
