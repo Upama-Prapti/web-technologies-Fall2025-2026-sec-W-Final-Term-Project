@@ -53,4 +53,3 @@ if(!isset($comments)) $comments = [];
 <script src="<?php echo ASSETS_URL; ?>js/admin_script.js"></script>
 </body>
 </html>
-
