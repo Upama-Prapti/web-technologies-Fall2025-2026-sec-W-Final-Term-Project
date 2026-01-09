@@ -23,28 +23,26 @@
 
       <div class="box">
          <h3><?= $stats['total_posts']; ?></h3>
-         <p>posts added</p>
+         <p>total posts</p>
          <a href="index.php?route=admin&action=add_post" class="btn">add new post</a>
       </div>
 
-      <?php if(isset($stats['pending_posts'])){ ?>
       <div class="box">
          <h3><?= $stats['pending_posts']; ?></h3>
          <p>pending posts</p>
-         <a href="index.php?route=admin&action=view_posts" class="btn">see posts</a>
+         <a href="index.php?route=admin&action=view_posts&status=pending" class="btn">see pending</a>
       </div>
-      <?php } ?>
 
       <div class="box">
          <h3><?= $stats['active_posts']; ?></h3>
          <p>active posts</p>
-         <a href="index.php?route=admin&action=view_posts" class="btn">see posts</a>
+         <a href="index.php?route=admin&action=view_posts&status=active" class="btn">see active</a>
       </div>
 
       <div class="box">
          <h3><?= $stats['deactive_posts']; ?></h3>
          <p>deactive posts</p>
-         <a href="index.php?route=admin&action=view_posts" class="btn">see posts</a>
+         <a href="index.php?route=admin&action=view_posts&status=deactive" class="btn">see deactive</a>
       </div>
 
       <div class="box">
@@ -61,7 +59,7 @@
       
       <div class="box">
          <h3><?= $stats['total_comments']; ?></h3>
-         <p>comments added</p>
+         <p>total comments</p>
          <a href="index.php?route=admin&action=comments" class="btn">see comments</a>
       </div>
 
@@ -76,4 +74,3 @@
 <script src="<?php echo ASSETS_URL; ?>js/admin_script.js"></script>
 </body>
 </html>
-
