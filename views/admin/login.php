@@ -1,5 +1,6 @@
 <?php
 if(!isset($message)) $message = [];
+if(!isset($show_default_credentials)) $show_default_credentials = false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,32 +29,30 @@ if(isset($message)){
 
 <section class="form-container">
    <form action="index.php?route=admin&action=login" method="POST" id="adminLoginForm">
-      <h3>LOGIN</h3>
+      <h3>ADMIN LOGIN</h3>
       
-      <div class="login-tabs">
-         <button type="button" class="tab-btn" data-tab="user">User Login</button>
-         <button type="button" class="tab-btn active" data-tab="admin">Admin Login</button>
+      <?php if($show_default_credentials){ ?>
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center;">
+         <p style="font-size: 1.4rem; margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> First Time Login</p>
+         <p style="font-size: 1.6rem; font-weight: bold;">Username: <span style="color: #ffd700;">upama</span></p>
+         <p style="font-size: 1.6rem; font-weight: bold;">Password: <span style="color: #ffd700;">1234</span></p>
+         <p style="font-size: 1.2rem; margin-top: 1rem; opacity: 0.9;"><i class="fas fa-exclamation-triangle"></i> Please update your password after first login!</p>
       </div>
+      <?php } ?>
       
       <input type="hidden" name="login_type" id="login_type" value="admin">
       
-      <div id="user-login" class="tab-content" style="display: none;">
-         <label>Username</label>
-         <input type="text" name="email" id="user_email" required placeholder="Enter your username" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
-         <label>Password</label>
-         <input type="password" name="user_pass" id="user_pass" required placeholder="Enter your password" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
-      </div>
-      
-      <div id="admin-login" class="tab-content active">
-         <label>Username</label>
-         <input type="text" name="name" id="admin_name" required placeholder="Enter your username" class="box" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
-         <label>Password</label>
-         <input type="password" name="admin_pass" id="admin_pass" required placeholder="Enter your password" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
-      </div>
+      <label>Username</label>
+      <input type="text" name="name" id="admin_name" required placeholder="Enter your username" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
+      <label>Password</label>
+      <input type="password" name="admin_pass" id="admin_pass" required placeholder="Enter your password" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
       
       <input type="submit" value="Login" name="submit" class="btn">
       
-      <div style="text-align: center; margin-top: 1rem;">
+      <div style="text-align: center; margin-top: 1.5rem;">
+         <a href="index.php?route=login" class="option-btn" style="display: inline-block; margin-right: 1rem;">
+            <i class="fas fa-user"></i> User Login
+         </a>
          <a href="index.php?route=home" class="option-btn" style="display: inline-block;">
             <i class="fas fa-home"></i> Back to Home
          </a>
@@ -62,72 +61,15 @@ if(isset($message)){
 </section>
 
 <script>
-function switchTab(tab) {
-   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-   document.querySelectorAll('.tab-content').forEach(c => {
-      c.classList.remove('active');
-      c.style.display = 'none';
-   });
-   
-   document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-   const activeTab = document.getElementById(tab + '-login');
-   activeTab.classList.add('active');
-   activeTab.style.display = 'block';
-   document.getElementById('login_type').value = tab;
-   
-   // Update required attributes based on active tab
-   if(tab === 'user') {
-      document.getElementById('user_email').required = true;
-      document.getElementById('user_pass').required = true;
-      document.getElementById('admin_name').required = false;
-      document.getElementById('admin_pass').required = false;
-   } else {
-      document.getElementById('user_email').required = false;
-      document.getElementById('user_pass').required = false;
-      document.getElementById('admin_name').required = true;
-      document.getElementById('admin_pass').required = true;
-   }
-}
-
-// Initialize tabs
-document.addEventListener('DOMContentLoaded', function() {
-   // Set initial state - admin tab active
-   switchTab('admin');
-   
-   // Add click handlers
-   document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-         const tab = this.getAttribute('data-tab');
-         switchTab(tab);
-      });
-   });
-   
-   // Handle form submission
-   document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
-      const loginType = document.getElementById('login_type').value;
-      
-      if(loginType === 'user') {
-         // Redirect to user login
-         e.preventDefault();
-         window.location.href = 'index.php?route=login';
-         return;
-      } else {
-         // Copy admin_pass to pass for admin login
-         const adminPass = document.getElementById('admin_pass').value;
-         const passInput = document.createElement('input');
-         passInput.type = 'hidden';
-         passInput.name = 'pass';
-         passInput.value = adminPass;
-         this.appendChild(passInput);
-         
-         // Remove user fields from submission
-         document.getElementById('user_email').removeAttribute('name');
-         document.getElementById('user_pass').removeAttribute('name');
-      }
-   });
+document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+   var adminPass = document.getElementById('admin_pass').value;
+   var passInput = document.createElement('input');
+   passInput.type = 'hidden';
+   passInput.name = 'pass';
+   passInput.value = adminPass;
+   this.appendChild(passInput);
 });
 </script>
 
 </body>
 </html>
-
