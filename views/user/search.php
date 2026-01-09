@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../../components/like_post.php';
 if(!isset($posts)) $posts = [];
 if(!isset($user_id)) $user_id = '';
 ?>
@@ -48,7 +47,7 @@ if(!isset($user_id)) $user_id = '';
          <a href="index.php?route=category&category=<?= $fetch_posts['category']; ?>" class="post-cat"> <i class="fas fa-tag"></i> <span><?= $fetch_posts['category']; ?></span></a>
          <div class="icons">
             <a href="index.php?route=post&post_id=<?= $post_id; ?>"><i class="fas fa-comment"></i><span>(<?= $fetch_posts['comments_count']; ?>)</span></a>
-            <button type="submit" name="like_post"><i class="fas fa-heart" style="<?php if($fetch_posts['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $fetch_posts['likes_count']; ?>)</span></button>
+            <button type="button" onclick="likePost(this, <?= $post_id; ?>, <?= $fetch_posts['admin_id']; ?>)"><i class="fas fa-heart" style="<?php if($fetch_posts['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $fetch_posts['likes_count']; ?>)</span></button>
          </div>
       </form>
       <?php
@@ -70,4 +69,3 @@ if(!isset($user_id)) $user_id = '';
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
 </body>
 </html>
-
