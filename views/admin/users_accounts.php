@@ -51,4 +51,3 @@ if(!isset($users)) $users = [];
 <script src="<?php echo ASSETS_URL; ?>js/admin_script.js"></script>
 </body>
 </html>
-
