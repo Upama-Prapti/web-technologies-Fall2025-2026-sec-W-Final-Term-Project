@@ -18,10 +18,21 @@ if(!isset($message)) $message = [];
 <section class="form-container">
    <form action="index.php?route=register" method="post">
       <h3>register now</h3>
-      <input type="text" name="name" required placeholder="enter your name" class="box" maxlength="50">
+      
+      <?php
+      if(!empty($message)){
+         foreach($message as $msg){
+            echo '<div class="message" style="background: #dc3545; color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: center;">
+               <span>'.$msg.'</span>
+            </div>';
+         }
+      }
+      ?>
+      
+      <input type="text" name="name" required placeholder="enter your username" class="box" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="email" name="email" required placeholder="enter your email" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="pass" required placeholder="enter your password" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="cpass" required placeholder="confirm your password" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="pass" required placeholder="enter your password (min 8 characters)" class="box" maxlength="50" minlength="8" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="cpass" required placeholder="confirm your password" class="box" maxlength="50" minlength="8" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="submit" value="register now" name="submit" class="btn">
       <p>already have an account? <a href="index.php?route=login">login now</a></p>
    </form>
@@ -31,4 +42,3 @@ if(!isset($message)) $message = [];
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
 </body>
 </html>
-
