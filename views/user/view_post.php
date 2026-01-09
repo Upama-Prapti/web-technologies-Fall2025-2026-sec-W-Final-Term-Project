@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../../components/like_post.php';
 if(!isset($post)) {
     echo '<p class="empty">no posts found!</p>';
     exit;
@@ -67,7 +66,7 @@ if(!isset($user_id)) $user_id = '';
          <div class="post-content"><?= $post['content']; ?></div>
          <div class="icons">
             <div><i class="fas fa-comment"></i><span>(<?= $post['comments_count']; ?>)</span></div>
-            <button type="submit" name="like_post"><i class="fas fa-heart" style="<?php if($post['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $post['likes_count']; ?>)</span></button>
+            <button type="button" onclick="likePost(this, <?= $post['id']; ?>, <?= $post['admin_id']; ?>)"><i class="fas fa-heart" style="<?php if($post['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $post['likes_count']; ?>)</span></button>
          </div>
       </form>
    </div>
@@ -136,4 +135,3 @@ if(!isset($user_id)) $user_id = '';
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
 </body>
 </html>
-
