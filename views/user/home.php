@@ -1,6 +1,3 @@
-<?php
-require_once __DIR__ . '/../../components/like_post.php';
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,9 +13,7 @@ require_once __DIR__ . '/../../components/like_post.php';
 <?php include __DIR__ . '/../../components/user_header.php'; ?>
 
 <div class="home-layout">
-   <!-- Left Sidebar -->
    <aside class="home-sidebar">
-      <!-- Login/Register or Profile Section -->
       <div class="sidebar-box">
          <?php if($fetch_profile){ ?>
          <div class="sidebar-profile">
@@ -46,7 +41,6 @@ require_once __DIR__ . '/../../components/like_post.php';
          <?php } ?>
       </div>
 
-      <!-- Categories Section -->
       <div class="sidebar-box">
          <div class="sidebar-title">
             <i class="fas fa-th"></i>
@@ -62,12 +56,11 @@ require_once __DIR__ . '/../../components/like_post.php';
             <a href="index.php?route=category&category=sports" class="sidebar-item"><i class="fas fa-football-ball"></i> Sports</a>
             <a href="index.php?route=category&category=design" class="sidebar-item"><i class="fas fa-palette"></i> Design</a>
             <a href="index.php?route=category&category=fashion" class="sidebar-item"><i class="fas fa-tshirt"></i> Fashion</a>
-            <a href="index.php?route=category&category=persional" class="sidebar-item"><i class="fas fa-user"></i> Personal</a>
+            <a href="index.php?route=category&category=personal" class="sidebar-item"><i class="fas fa-user"></i> Personal</a>
             <a href="index.php?route=categories" class="sidebar-item view-all"><i class="fas fa-arrow-right"></i> View All</a>
          </div>
       </div>
 
-      <!-- Authors Section -->
       <div class="sidebar-box">
          <div class="sidebar-title">
             <i class="fas fa-users"></i>
@@ -88,7 +81,6 @@ require_once __DIR__ . '/../../components/like_post.php';
       </div>
    </aside>
 
-   <!-- Main Content Area -->
    <main class="home-main">
       <div class="main-header">
          <h1 class="main-title">Today Trending</h1>
@@ -121,7 +113,7 @@ require_once __DIR__ . '/../../components/like_post.php';
          <a href="index.php?route=category&category=<?= $fetch_posts['category']; ?>" class="post-cat"> <i class="fas fa-tag"></i> <span><?= $fetch_posts['category']; ?></span></a>
          <div class="icons">
             <a href="index.php?route=post&post_id=<?= $post_id; ?>"><i class="fas fa-comment"></i><span>(<?= $fetch_posts['comments_count']; ?>)</span></a>
-            <button type="submit" name="like_post"><i class="fas fa-heart" style="<?php if($fetch_posts['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $fetch_posts['likes_count']; ?>)</span></button>
+            <button type="button" onclick="likePost(this, <?= $post_id; ?>, <?= $fetch_posts['admin_id']; ?>)"><i class="fas fa-heart" style="<?php if($fetch_posts['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $fetch_posts['likes_count']; ?>)</span></button>
          </div>
       </form>
          <?php
@@ -142,4 +134,3 @@ require_once __DIR__ . '/../../components/like_post.php';
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
 </body>
 </html>
-
