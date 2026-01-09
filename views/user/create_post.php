@@ -61,6 +61,3 @@ if(!isset($user)) $user = ['name' => ''];
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
 </body>
 </html>
-
-
-
