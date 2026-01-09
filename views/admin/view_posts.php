@@ -1,8 +1,8 @@
 <?php
 if(!isset($message)) $message = [];
-if(!isset($is_user_admin)) $is_user_admin = false;
 if(!isset($posts)) $posts = [];
 $admin_id = $_SESSION['admin_id'] ?? 0;
+$status_filter = $_GET['status'] ?? 'all';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,31 @@ $admin_id = $_SESSION['admin_id'] ?? 0;
 
 <section class="show-posts">
    <h1 class="heading">posts management</h1>
-   <p style="text-align: center; margin-bottom: 2rem; color: var(--light-color); font-size: 1.6rem;">Posts from users are marked with "USER POST" badge and need approval</p>
+   
+   <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+      <a href="index.php?route=admin&action=view_posts&status=all" class="option-btn" style="<?php echo ($status_filter == 'all') ? 'background: var(--main-color); color: white;' : ''; ?>">
+         <i class="fas fa-list"></i> All Posts
+      </a>
+      <a href="index.php?route=admin&action=view_posts&status=active" class="option-btn" style="<?php echo ($status_filter == 'active') ? 'background: #28a745; color: white;' : ''; ?>">
+         <i class="fas fa-check-circle"></i> Active Posts
+      </a>
+      <a href="index.php?route=admin&action=view_posts&status=pending" class="option-btn" style="<?php echo ($status_filter == 'pending') ? 'background: #ffc107; color: white;' : ''; ?>">
+         <i class="fas fa-clock"></i> Pending Posts
+      </a>
+      <a href="index.php?route=admin&action=view_posts&status=deactive" class="option-btn" style="<?php echo ($status_filter == 'deactive') ? 'background: #dc3545; color: white;' : ''; ?>">
+         <i class="fas fa-times-circle"></i> Deactive Posts
+      </a>
+   </div>
+   
+   <p style="text-align: center; margin-bottom: 2rem; color: var(--light-color); font-size: 1.6rem;">
+      <?php
+         if($status_filter == 'active') echo 'Showing only active posts';
+         elseif($status_filter == 'pending') echo 'Showing only pending posts - need approval';
+         elseif($status_filter == 'deactive') echo 'Showing only deactive/rejected posts';
+         else echo 'Showing all posts';
+      ?>
+   </p>
+   
    <div class="box-container">
       <?php
          if(!empty($posts)){
@@ -53,23 +77,22 @@ $admin_id = $_SESSION['admin_id'] ?? 0;
             <div class="comments" style="display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-comment" style="color: var(--main-color);"></i><span style="color: var(--black); font-weight: 500;"><?= $fetch_posts['comments_count']; ?></span></div>
          </div>
          <div class="flex-btn" style="margin-top: 1.5rem;">
-            <?php if($fetch_posts['status'] == 'pending' && (isset($fetch_posts['is_user_post']) && $fetch_posts['is_user_post'] == 1)){ ?>
+            <?php if($fetch_posts['status'] == 'pending'){ ?>
                <button type="submit" name="approve" class="option-btn" style="background-color: #28a745; color: white; flex: 1;">✓ Approve</button>
                <button type="submit" name="reject" class="option-btn" style="background-color: #dc3545; color: white; flex: 1;">✗ Reject</button>
             <?php } ?>
-            <?php if($fetch_posts['admin_id'] == $admin_id || ($is_user_admin && !isset($fetch_posts['is_user_post']))){ ?>
-               <a href="index.php?route=admin&action=edit_post&id=<?= $post_id; ?>" class="option-btn" style="flex: 1;">Edit</a>
+            <?php if($fetch_posts['status'] == 'deactive'){ ?>
+               <button type="submit" name="approve" class="option-btn" style="background-color: #28a745; color: white; flex: 1;">✓ Reactivate</button>
             <?php } ?>
-            <?php if($fetch_posts['admin_id'] == $admin_id || $is_user_admin){ ?>
-               <button type="submit" name="delete" class="delete-btn" style="flex: 1;" onclick="return confirm('delete this post?');">Delete</button>
-            <?php } ?>
+            <a href="index.php?route=admin&action=edit_post&id=<?= $post_id; ?>" class="option-btn" style="flex: 1;">Edit</a>
+            <button type="submit" name="delete" class="delete-btn" style="flex: 1;" onclick="return confirm('delete this post?');">Delete</button>
          </div>
          <a href="index.php?route=admin&action=read_post&post_id=<?= $post_id; ?>" class="btn" style="margin-top: 1rem;">View Post</a>
       </form>
       <?php
             }
          }else{
-            echo '<p class="empty">no posts added yet! <a href="index.php?route=admin&action=add_post" class="btn" style="margin-top:1.5rem;">add post</a></p>';
+            echo '<p class="empty">no posts found for this filter! <a href="index.php?route=admin&action=add_post" class="btn" style="margin-top:1.5rem;">add post</a></p>';
          }
       ?>
    </div>
@@ -78,4 +101,3 @@ $admin_id = $_SESSION['admin_id'] ?? 0;
 <script src="<?php echo ASSETS_URL; ?>js/admin_script.js"></script>
 </body>
 </html>
-
