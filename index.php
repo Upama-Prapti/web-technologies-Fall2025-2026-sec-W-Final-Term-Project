@@ -1,155 +1,135 @@
 <?php
-// Main entry point - Router
 require_once __DIR__ . '/config/config.php';
 
-// Get route from URL
 $route = $_GET['route'] ?? 'login';
 $action = $_GET['action'] ?? '';
 
-// Route to appropriate controller
 switch($route) {
     case 'login':
     case 'register':
         require_once __DIR__ . '/controllers/AuthController.php';
-        $controller = new AuthController();
         if($route == 'login') {
-            $controller->login();
+            auth_login();
         } else {
-            $controller->register();
+            auth_register();
         }
         break;
         
     case 'home':
         require_once __DIR__ . '/controllers/PostController.php';
-        $controller = new PostController();
-        $controller->home();
+        post_home();
         break;
         
     case 'posts':
         require_once __DIR__ . '/controllers/PostController.php';
-        $controller = new PostController();
-        $controller->allPosts();
+        post_all_posts();
         break;
         
     case 'post':
         require_once __DIR__ . '/controllers/PostController.php';
-        $controller = new PostController();
-        $controller->viewPost();
+        post_view_post();
         break;
         
     case 'category':
         require_once __DIR__ . '/controllers/PostController.php';
-        $controller = new PostController();
-        $controller->category();
+        post_category();
         break;
         
     case 'author':
         require_once __DIR__ . '/controllers/PostController.php';
-        $controller = new PostController();
-        $controller->authorPosts();
+        post_author_posts();
         break;
         
     case 'search':
         require_once __DIR__ . '/controllers/PostController.php';
-        $controller = new PostController();
-        $controller->search();
+        post_search();
         break;
         
     case 'update':
         require_once __DIR__ . '/controllers/UserController.php';
-        $controller = new UserController();
-        $controller->updateProfile();
+        user_update_profile();
         break;
         
     case 'likes':
         require_once __DIR__ . '/controllers/UserController.php';
-        $controller = new UserController();
-        $controller->userLikes();
+        user_likes();
         break;
         
     case 'comments':
         require_once __DIR__ . '/controllers/UserController.php';
-        $controller = new UserController();
-        $controller->userComments();
+        user_comments();
         break;
         
     case 'create_post':
         require_once __DIR__ . '/controllers/UserController.php';
-        $controller = new UserController();
-        $controller->createPost();
+        user_create_post();
         break;
         
     case 'logout':
         require_once __DIR__ . '/controllers/AuthController.php';
-        $controller = new AuthController();
-        $controller->logout();
+        auth_logout();
         break;
         
     case 'authors':
         require_once __DIR__ . '/controllers/AuthorController.php';
-        $controller = new AuthorController();
-        $controller->allAuthors();
+        author_all_authors();
         break;
         
     case 'categories':
         require_once __DIR__ . '/controllers/CategoryController.php';
-        $controller = new CategoryController();
-        $controller->allCategories();
+        category_all_categories();
         break;
         
     case 'admin':
         require_once __DIR__ . '/controllers/AdminController.php';
-        $controller = new AdminController();
         $action = $_GET['action'] ?? 'login';
         
         switch($action) {
             case 'login':
-                $controller->login();
+                admin_login();
                 break;
             case 'dashboard':
-                $controller->dashboard();
+                admin_dashboard();
                 break;
             case 'add_post':
-                $controller->addPost();
+                admin_add_post();
                 break;
             case 'view_posts':
-                $controller->viewPosts();
+                admin_view_posts();
                 break;
             case 'edit_post':
-                $controller->editPost();
+                admin_edit_post();
                 break;
             case 'read_post':
-                $controller->readPost();
+                admin_read_post();
                 break;
             case 'update_profile':
-                $controller->updateProfile();
+                admin_update_profile();
                 break;
             case 'users_accounts':
-                $controller->usersAccounts();
+                admin_users_accounts();
                 break;
             case 'admin_accounts':
-                $controller->adminAccounts();
+                admin_admin_accounts();
                 break;
             case 'comments':
-                $controller->comments();
+                admin_comments();
                 break;
             case 'register_admin':
-                $controller->registerAdmin();
+                admin_register_admin();
                 break;
             case 'logout':
-                $controller->logout();
+                admin_logout();
                 break;
             default:
-                $controller->login();
+                admin_login();
                 break;
         }
         break;
         
     default:
-        // Default to login
         require_once __DIR__ . '/controllers/AuthController.php';
-        $controller = new AuthController();
-        $controller->login();
+        auth_login();
         break;
 }
 ?>
