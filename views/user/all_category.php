@@ -35,6 +35,7 @@
       <div class="box"><span>18</span><a href="index.php?route=category&category=business">business</a></div>
       <div class="box"><span>19</span><a href="index.php?route=category&category=shopping">shopping</a></div>
       <div class="box"><span>20</span><a href="index.php?route=category&category=animations">animations</a></div>
+      <div class="box"><span>21</span><a href="index.php?route=category&category=personal">personal</a></div>
    </div>
 </section>
 
@@ -42,4 +43,3 @@
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
 </body>
 </html>
-
