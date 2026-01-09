@@ -9,7 +9,6 @@ if(isset($message)){
       ';
    }
 }
-$is_superadmin = ($_SESSION['is_superadmin'] ?? 0) == 1;
 ?>
 
 <header class="header">
@@ -58,9 +57,7 @@ $is_superadmin = ($_SESSION['is_superadmin'] ?? 0) == 1;
       <a href="index.php?route=admin&action=dashboard"><i class="fas fa-home"></i> <span>home</span></a>
       <a href="index.php?route=admin&action=add_post"><i class="fas fa-pen"></i> <span>add posts</span></a>
       <a href="index.php?route=admin&action=view_posts"><i class="fas fa-eye"></i> <span>view posts</span></a>
-      <?php if($is_superadmin){ ?>
       <a href="index.php?route=admin&action=admin_accounts"><i class="fas fa-user"></i> <span>accounts</span></a>
-      <?php } ?>
       <?php if($admin_id != ''){ ?>
       <a href="index.php?route=admin&action=logout" style="color:var(--red);" onclick="return confirm('logout from the website?');"><i class="fas fa-right-from-bracket"></i><span>logout</span></a>
       <?php } ?>
