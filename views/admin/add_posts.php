@@ -60,4 +60,3 @@ if(!isset($message)) $message = [];
 <script src="<?php echo ASSETS_URL; ?>js/admin_script.js"></script>
 </body>
 </html>
-
