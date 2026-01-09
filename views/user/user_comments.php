@@ -73,4 +73,3 @@ if(!isset($comments_with_posts)) $comments_with_posts = [];
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
 </body>
 </html>
-
