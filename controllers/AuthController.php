@@ -9,48 +9,15 @@ function auth_login() {
     
     if(isset($_POST['submit'])) {
         $login_type = $_POST['login_type'] ?? 'user';
-        $pass = sha1($_POST['pass']);
         
+        // Redirect all admin login attempts to the dedicated admin login panel
         if($login_type === 'admin') {
-            $name = trim($_POST['name']);
-            
-            $stmt = $conn->prepare("SELECT * FROM `admin` WHERE name = ?");
-            $stmt->bind_param("s", $name);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if($result->num_rows > 0){
-                $row = $result->fetch_assoc();
-                if($row['password'] == $pass){
-                    $_SESSION['admin_id'] = $row['id'];
-                    $_SESSION['admin_name'] = $row['name'];
-                    header('location: index.php?route=admin&action=dashboard');
-                    exit;
-                }else{
-                    $message[] = 'incorrect password!';
-                }
-            }else{
-                $stmt = $conn->prepare("SELECT * FROM `users` WHERE name = ? AND is_admin = 1");
-                $stmt->bind_param("s", $name);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                
-                if($result->num_rows > 0){
-                    $row = $result->fetch_assoc();
-                    if($row['password'] == $pass){
-                        $_SESSION['admin_id'] = $row['id'];
-                        $_SESSION['admin_name'] = $row['name'];
-                        header('location: index.php?route=admin&action=dashboard');
-                        exit;
-                    }else{
-                        $message[] = 'incorrect password!';
-                    }
-                }else{
-                    $message[] = 'incorrect username!';
-                }
-            }
-        } else {
-            $name = trim($_POST['name']);
+            header('location: index.php?route=admin&action=login');
+            exit;
+        }
+        
+        $pass = sha1($_POST['pass']);
+        $name = trim($_POST['name']);
             
             $stmt = $conn->prepare("SELECT * FROM `admin` WHERE name = ?");
             $stmt->bind_param("s", $name);
@@ -89,7 +56,6 @@ function auth_login() {
                     $message[] = 'incorrect username!';
                 }
             }
-        }
     }
     
     include __DIR__ . '/../views/user/login.php';
