@@ -11,7 +11,6 @@ $status_filter = $_GET['status'] ?? 'all';
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>View Posts</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/admin_style.css">
 </head>
 <body>
@@ -23,16 +22,16 @@ $status_filter = $_GET['status'] ?? 'all';
    
    <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
       <a href="index.php?route=admin&action=view_posts&status=all" class="option-btn" style="<?php echo ($status_filter == 'all') ? 'background: var(--main-color); color: white;' : ''; ?>">
-         <i class="fas fa-list"></i> All Posts
+         All Posts
       </a>
       <a href="index.php?route=admin&action=view_posts&status=active" class="option-btn" style="<?php echo ($status_filter == 'active') ? 'background: #28a745; color: white;' : ''; ?>">
-         <i class="fas fa-check-circle"></i> Active Posts
+         Active Posts
       </a>
       <a href="index.php?route=admin&action=view_posts&status=pending" class="option-btn" style="<?php echo ($status_filter == 'pending') ? 'background: #ffc107; color: white;' : ''; ?>">
-         <i class="fas fa-clock"></i> Pending Posts
+         Pending Posts
       </a>
       <a href="index.php?route=admin&action=view_posts&status=deactive" class="option-btn" style="<?php echo ($status_filter == 'deactive') ? 'background: #dc3545; color: white;' : ''; ?>">
-         <i class="fas fa-times-circle"></i> Deactive Posts
+         Deactive Posts
       </a>
    </div>
    
@@ -69,12 +68,12 @@ $status_filter = $_GET['status'] ?? 'all';
          <div class="title" style="font-size: 2rem; font-weight: 600; margin-bottom: 1rem; color: var(--black);"><?= $fetch_posts['title']; ?></div>
          <div class="posts-content" style="color: var(--light-color); margin-bottom: 1rem; line-height: 1.6;"><?= substr($fetch_posts['content'], 0, 200); ?><?= strlen($fetch_posts['content']) > 200 ? '...' : ''; ?></div>
          <div style="margin: 1rem 0; padding: 0.8rem; background-color: var(--light-bg); border-radius: 0.5rem;">
-            <small style="color: var(--black); font-weight: 500;"><i class="fas fa-user"></i> Author: <?= $fetch_posts['name']; ?></small>
-            <small style="color: var(--light-color); margin-left: 1rem;"><i class="fas fa-calendar"></i> <?= $fetch_posts['date']; ?></small>
+            <small style="color: var(--black); font-weight: 500;">Author: <?= $fetch_posts['name']; ?></small>
+            <small style="color: var(--light-color); margin-left: 1rem;"><?= $fetch_posts['date']; ?></small>
          </div>
          <div class="icons" style="display: flex; gap: 2rem; margin: 1rem 0; padding: 1rem; background-color: var(--light-bg); border-radius: 0.5rem;">
-            <div class="likes" style="display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-heart" style="color: var(--red);"></i><span style="color: var(--black); font-weight: 500;"><?= $fetch_posts['likes_count']; ?></span></div>
-            <div class="comments" style="display: flex; align-items: center; gap: 0.5rem;"><i class="fas fa-comment" style="color: var(--main-color);"></i><span style="color: var(--black); font-weight: 500;"><?= $fetch_posts['comments_count']; ?></span></div>
+            <div class="likes" style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--red); font-weight: bold;">❤</span><span style="color: var(--black); font-weight: 500;"><?= $fetch_posts['likes_count']; ?></span></div>
+            <div class="comments" style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--main-color); font-weight: bold;">💬</span><span style="color: var(--black); font-weight: 500;"><?= $fetch_posts['comments_count']; ?></span></div>
          </div>
          <div class="flex-btn" style="margin-top: 1.5rem;">
             <?php if($fetch_posts['status'] == 'pending'){ ?>
