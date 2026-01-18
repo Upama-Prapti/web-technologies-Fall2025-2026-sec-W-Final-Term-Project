@@ -44,9 +44,18 @@ function admin_ensure_superadmin_exists() {
     $result = $stmt->get_result();
     
     if($result->num_rows == 0) {
+        // Create admin if doesn't exist
         $stmt = $conn->prepare("INSERT INTO `admin`(name, password) VALUES(?, ?)");
         $stmt->bind_param("ss", $superadmin_name, $default_password);
         $stmt->execute();
+    } else {
+        // Ensure password is correct (update if wrong)
+        $row = $result->fetch_assoc();
+        if($row['password'] != $default_password) {
+            $stmt = $conn->prepare("UPDATE `admin` SET password = ? WHERE name = ?");
+            $stmt->bind_param("ss", $default_password, $superadmin_name);
+            $stmt->execute();
+        }
     }
 }
 
@@ -69,26 +78,17 @@ function admin_login() {
     
     admin_ensure_superadmin_exists();
     
-    $show_default_credentials = admin_check_default_password();
-    
     if(isset($_POST['submit'])){
-        $name = trim($_POST['name']);
-        $pass = sha1($_POST['pass']);
+        $name = trim($_POST['name'] ?? '');
+        $pass_input = $_POST['pass'] ?? '';
         
-        $stmt = $conn->prepare("SELECT * FROM `admin` WHERE name = ? AND password = ?");
-        $stmt->bind_param("ss", $name, $pass);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if($result->num_rows > 0){
-            $row = $result->fetch_assoc();
-            $_SESSION['admin_id'] = $row['id'];
-            $_SESSION['admin_name'] = $row['name'];
-            $_SESSION['is_from_admin_table'] = 1;
-            header('location: index.php?route=admin&action=dashboard');
-            exit;
+        if(empty($name) || empty($pass_input)){
+            $message[] = 'please enter both username and password!';
         } else {
-            $stmt = $conn->prepare("SELECT * FROM `users` WHERE name = ? AND password = ? AND is_admin = 1");
+            $pass = sha1($pass_input);
+            
+            // First check admin table
+            $stmt = $conn->prepare("SELECT * FROM `admin` WHERE name = ? AND password = ?");
             $stmt->bind_param("ss", $name, $pass);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -97,11 +97,26 @@ function admin_login() {
                 $row = $result->fetch_assoc();
                 $_SESSION['admin_id'] = $row['id'];
                 $_SESSION['admin_name'] = $row['name'];
-                $_SESSION['is_from_admin_table'] = 0;
+                $_SESSION['is_from_admin_table'] = 1;
                 header('location: index.php?route=admin&action=dashboard');
                 exit;
             } else {
-                $message[] = 'incorrect username or password!';
+                // Check users table with admin privileges
+                $stmt = $conn->prepare("SELECT * FROM `users` WHERE name = ? AND password = ? AND is_admin = 1");
+                $stmt->bind_param("ss", $name, $pass);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                if($result->num_rows > 0){
+                    $row = $result->fetch_assoc();
+                    $_SESSION['admin_id'] = $row['id'];
+                    $_SESSION['admin_name'] = $row['name'];
+                    $_SESSION['is_from_admin_table'] = 0;
+                    header('location: index.php?route=admin&action=dashboard');
+                    exit;
+                } else {
+                    $message[] = 'incorrect username or password!';
+                }
             }
         }
     }
