@@ -17,19 +17,25 @@ function admin_check_auth() {
 
 function admin_get_profile($admin_id) {
     global $conn;
-    $stmt = $conn->prepare("SELECT * FROM `admin` WHERE id = ?");
-    $stmt->bind_param("i", $admin_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $profile = $result->fetch_assoc();
+    // Check which table the admin is from based on session
+    $is_from_admin_table = $_SESSION['is_from_admin_table'] ?? 1;
     
-    if(!$profile) {
+    if($is_from_admin_table == 1) {
+        // Admin from admin table
+        $stmt = $conn->prepare("SELECT * FROM `admin` WHERE id = ?");
+        $stmt->bind_param("i", $admin_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $profile = $result->fetch_assoc();
+    } else {
+        // Admin from users table
         $stmt = $conn->prepare("SELECT * FROM `users` WHERE id = ? AND is_admin = 1");
         $stmt->bind_param("i", $admin_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $profile = $result->fetch_assoc();
     }
+    
     return $profile;
 }
 
@@ -95,6 +101,12 @@ function admin_login() {
             
             if($result->num_rows > 0){
                 $row = $result->fetch_assoc();
+                // Clear user session variables when logging in as admin
+                unset($_SESSION['user_id']);
+                unset($_SESSION['user_name']);
+                unset($_SESSION['is_admin']);
+                
+                // Set admin session variables
                 $_SESSION['admin_id'] = $row['id'];
                 $_SESSION['admin_name'] = $row['name'];
                 $_SESSION['is_from_admin_table'] = 1;
@@ -109,6 +121,12 @@ function admin_login() {
                 
                 if($result->num_rows > 0){
                     $row = $result->fetch_assoc();
+                    // Clear user session variables when logging in as admin
+                    unset($_SESSION['user_id']);
+                    unset($_SESSION['user_name']);
+                    unset($_SESSION['is_admin']);
+                    
+                    // Set admin session variables
                     $_SESSION['admin_id'] = $row['id'];
                     $_SESSION['admin_name'] = $row['name'];
                     $_SESSION['is_from_admin_table'] = 0;
