@@ -14,7 +14,6 @@ if(!isset($user_id)) $user_id = '';
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>View Post</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/style.css">
 </head>
 <body>
@@ -51,7 +50,7 @@ if(!isset($user_id)) $user_id = '';
          <input type="hidden" name="post_id" value="<?= $post['id']; ?>">
          <input type="hidden" name="admin_id" value="<?= $post['admin_id']; ?>">
          <div class="post-admin">
-            <i class="fas fa-user"></i>
+            <span style="font-weight: bold;">👤</span>
             <div>
                <a href="index.php?route=author&author=<?= $post['name']; ?>"><?= $post['name']; ?></a>
                <div><?= $post['date']; ?></div>
@@ -65,8 +64,8 @@ if(!isset($user_id)) $user_id = '';
          <div class="post-title"><?= $post['title']; ?></div>
          <div class="post-content"><?= $post['content']; ?></div>
          <div class="icons">
-            <div><i class="fas fa-comment"></i><span>(<?= $post['comments_count']; ?>)</span></div>
-            <button type="button" onclick="likePost(this, <?= $post['id']; ?>, <?= $post['admin_id']; ?>)"><i class="fas fa-heart" style="<?php if($post['has_liked']){ echo 'color:var(--red);'; } ?>"></i><span>(<?= $post['likes_count']; ?>)</span></button>
+            <div><span style="font-weight: bold;">💬</span><span>(<?= $post['comments_count']; ?>)</span></div>
+            <button type="button" onclick="likePost(this, <?= $post['id']; ?>, <?= $post['admin_id']; ?>)"><span style="font-weight: bold; <?php if($post['has_liked']){ echo 'color:var(--red);'; } ?>">❤</span><span>(<?= $post['likes_count']; ?>)</span></button>
          </div>
       </form>
    </div>
@@ -80,7 +79,7 @@ if(!isset($user_id)) $user_id = '';
    <form action="index.php?route=post&post_id=<?= $post['id']; ?>" method="post" class="add-comment">
       <input type="hidden" name="admin_id" value="<?= $post['admin_id']; ?>">
       <input type="hidden" name="user_name" value="<?= $fetch_profile['name']; ?>">
-      <p class="user"><i class="fas fa-user"></i><a href="index.php?route=update"><?= $fetch_profile['name']; ?></a></p>
+      <p class="user"><span style="font-weight: bold;">👤</span><a href="index.php?route=update"><?= $fetch_profile['name']; ?></a></p>
       <textarea name="comment" maxlength="1000" class="comment-box" cols="30" rows="10" placeholder="write your comment" required></textarea>
       <input type="submit" value="add comment" class="inline-btn" name="add_comment">
    </form>
@@ -103,7 +102,7 @@ if(!isset($user_id)) $user_id = '';
       ?>
       <div class="show-comments" style="<?php if($fetch_comments['user_id'] == $user_id){echo 'order:-1;'; } ?>">
          <div class="comment-user">
-            <i class="fas fa-user"></i>
+            <span style="font-weight: bold;">👤</span>
             <div>
                <span><?= $fetch_comments['user_name']; ?></span>
                <div><?= $fetch_comments['date']; ?></div>
