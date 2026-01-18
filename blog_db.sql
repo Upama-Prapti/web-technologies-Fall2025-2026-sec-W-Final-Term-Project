@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `name`, `password`) VALUES
-(1, 'upama', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220');
+(1, 'upama', '7c4a8d09ca3762af61e59520943dc26494f8941b');
 
 -- --------------------------------------------------------
 
