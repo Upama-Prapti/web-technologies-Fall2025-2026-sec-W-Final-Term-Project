@@ -8,7 +8,6 @@ if(!isset($message)) $message = [];
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Login</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/style.css">
 </head>
 <body>
@@ -31,7 +30,7 @@ if(!isset($message)) $message = [];
       
       <div class="login-tabs">
          <button type="button" class="tab-btn active" data-tab="user">User Login</button>
-         <button type="button" class="tab-btn" data-tab="admin">Admin Login</button>
+         <a href="index.php?route=admin&action=login" class="tab-btn" style="text-decoration: none; display: inline-block;">Admin Login</a>
       </div>
       
       <input type="hidden" name="login_type" id="login_type" value="user">
@@ -44,15 +43,15 @@ if(!isset($message)) $message = [];
       </div>
       
       <div id="admin-login" class="tab-content" style="display: none;">
-         <label>Username</label>
-         <input type="text" name="admin_name" id="admin_name" required placeholder="Enter your username" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
-         <label>Password</label>
-         <input type="password" name="admin_pass" id="admin_pass" required placeholder="Enter your password" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
+         <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: center;">
+            <p style="color: #856404; font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;">⚠️ Admin login has been moved to a dedicated panel</p>
+            <a href="index.php?route=admin&action=login" class="btn" style="margin-top: 0.5rem; display: inline-block; padding: 0.8rem 2rem;">Go to Admin Login Panel</a>
+         </div>
       </div>
       
       <input type="submit" value="Login" name="submit" class="btn">
       <p>Don't have an account? <a href="index.php?route=register">Sign Up</a></p>
-      <p style="margin-top: 1rem;"><a href="index.php?route=admin&action=login" style="color: var(--main-color);"><i class="fas fa-user-shield"></i> Go to Admin Panel</a></p>
+      <p style="margin-top: 1rem;"><a href="index.php?route=admin&action=login" style="color: var(--main-color); font-weight: bold;">Go to Admin Login Panel</a></p>
    </form>
 </section>
 
@@ -86,10 +85,12 @@ function switchTab(tab) {
 document.addEventListener('DOMContentLoaded', function() {
    switchTab('user');
    
-   document.querySelectorAll('.tab-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
+   document.querySelectorAll('.tab-btn[data-tab]').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
          var tab = this.getAttribute('data-tab');
-         switchTab(tab);
+         if(tab) {
+            switchTab(tab);
+         }
       });
    });
    
