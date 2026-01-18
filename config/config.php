@@ -10,7 +10,7 @@ define('ASSETS_URL', 'assets/');
 define('UPLOADED_IMG_URL', 'uploaded_img/');
 
 define('SUPERADMIN_USERNAME', 'upama');
-define('SUPERADMIN_DEFAULT_PASSWORD', '1234');
+define('SUPERADMIN_DEFAULT_PASSWORD', '12345678');
 
 require_once ROOT_PATH . 'config/database.php';
 ?>
