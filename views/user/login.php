@@ -63,22 +63,38 @@ function switchTab(tab) {
       c.style.display = 'none';
    });
    
-   document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+   var tabBtn = document.querySelector('[data-tab="' + tab + '"]');
+   if(tabBtn) {
+      tabBtn.classList.add('active');
+   }
+   
    var activeTab = document.getElementById(tab + '-login');
-   activeTab.classList.add('active');
-   activeTab.style.display = 'block';
-   document.getElementById('login_type').value = tab;
+   if(activeTab) {
+      activeTab.classList.add('active');
+      activeTab.style.display = 'block';
+   }
+   
+   var loginTypeInput = document.getElementById('login_type');
+   if(loginTypeInput) {
+      loginTypeInput.value = tab;
+   }
+   
+   // Only set required attributes if elements exist
+   var userName = document.getElementById('user_name');
+   var userPass = document.getElementById('user_pass');
+   var adminName = document.getElementById('admin_name');
+   var adminPass = document.getElementById('admin_pass');
    
    if(tab === 'user') {
-      document.getElementById('user_name').required = true;
-      document.getElementById('user_pass').required = true;
-      document.getElementById('admin_name').required = false;
-      document.getElementById('admin_pass').required = false;
+      if(userName) userName.required = true;
+      if(userPass) userPass.required = true;
+      if(adminName) adminName.required = false;
+      if(adminPass) adminPass.required = false;
    } else {
-      document.getElementById('user_name').required = false;
-      document.getElementById('user_pass').required = false;
-      document.getElementById('admin_name').required = true;
-      document.getElementById('admin_pass').required = true;
+      if(userName) userName.required = false;
+      if(userPass) userPass.required = false;
+      if(adminName) adminName.required = true;
+      if(adminPass) adminPass.required = true;
    }
 }
 
@@ -94,41 +110,54 @@ document.addEventListener('DOMContentLoaded', function() {
       });
    });
    
-   document.getElementById('loginForm').addEventListener('submit', function(e) {
-      var loginType = document.getElementById('login_type').value;
-      
-      if(loginType === 'user') {
-         var userPass = document.getElementById('user_pass').value;
-         var userName = document.getElementById('user_name').value;
+   var loginForm = document.getElementById('loginForm');
+   if(loginForm) {
+      loginForm.addEventListener('submit', function(e) {
+         var loginTypeInput = document.getElementById('login_type');
+         var loginType = loginTypeInput ? loginTypeInput.value : 'user';
          
-         var passInput = document.createElement('input');
-         passInput.type = 'hidden';
-         passInput.name = 'pass';
-         passInput.value = userPass;
-         this.appendChild(passInput);
-         
-         document.getElementById('admin_name').removeAttribute('name');
-         document.getElementById('admin_pass').removeAttribute('name');
-      } else {
-         var adminPass = document.getElementById('admin_pass').value;
-         var adminName = document.getElementById('admin_name').value;
-         
-         var passInput = document.createElement('input');
-         passInput.type = 'hidden';
-         passInput.name = 'pass';
-         passInput.value = adminPass;
-         this.appendChild(passInput);
-         
-         var nameInput = document.createElement('input');
-         nameInput.type = 'hidden';
-         nameInput.name = 'name';
-         nameInput.value = adminName;
-         this.appendChild(nameInput);
-         
-         document.getElementById('user_name').removeAttribute('name');
-         document.getElementById('user_pass').removeAttribute('name');
-      }
-   });
+         if(loginType === 'user') {
+            var userPass = document.getElementById('user_pass');
+            var userName = document.getElementById('user_name');
+            
+            if(userPass && userName) {
+               var passInput = document.createElement('input');
+               passInput.type = 'hidden';
+               passInput.name = 'pass';
+               passInput.value = userPass.value;
+               this.appendChild(passInput);
+            }
+            
+            var adminName = document.getElementById('admin_name');
+            var adminPass = document.getElementById('admin_pass');
+            if(adminName) adminName.removeAttribute('name');
+            if(adminPass) adminPass.removeAttribute('name');
+         } else {
+            // Admin login - redirect handled by link, but just in case
+            var adminPass = document.getElementById('admin_pass');
+            var adminName = document.getElementById('admin_name');
+            
+            if(adminPass && adminName) {
+               var passInput = document.createElement('input');
+               passInput.type = 'hidden';
+               passInput.name = 'pass';
+               passInput.value = adminPass.value;
+               this.appendChild(passInput);
+               
+               var nameInput = document.createElement('input');
+               nameInput.type = 'hidden';
+               nameInput.name = 'name';
+               nameInput.value = adminName.value;
+               this.appendChild(nameInput);
+            }
+            
+            var userName = document.getElementById('user_name');
+            var userPass = document.getElementById('user_pass');
+            if(userName) userName.removeAttribute('name');
+            if(userPass) userPass.removeAttribute('name');
+         }
+      });
+   }
 });
 </script>
 
