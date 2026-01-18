@@ -1,131 +1,136 @@
+<?php
+if(!isset($message)) $message = [];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>home page</title>
+   <title>Login</title>
    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/style.css">
 </head>
 <body>
    
 <?php include __DIR__ . '/../../components/user_header.php'; ?>
 
-<div class="home-layout">
-   <aside class="home-sidebar">
-      <div class="sidebar-box">
-         <?php if($fetch_profile){ ?>
-         <div class="sidebar-profile">
-            <div class="profile-info">
-               <span style="font-size: 3rem;">👤</span>
-               <div>
-                  <p class="profile-name"><?= $fetch_profile['name']; ?></p>
-                  <p class="profile-stats">Comments: <?= $total_user_comments; ?> | Likes: <?= $total_user_likes; ?></p>
-               </div>
-            </div>
-            <a href="index.php?route=create_post" class="sidebar-btn">+ Create Post</a>
-            <a href="index.php?route=update" class="sidebar-btn">✏️ Update Profile</a>
-            <div class="sidebar-links">
-               <a href="index.php?route=likes" class="sidebar-link">❤ Likes</a>
-               <a href="index.php?route=comments" class="sidebar-link">💬 Comments</a>
-            </div>
-         </div>
-         <?php } else { ?>
-         <div class="sidebar-login">
-            <div class="sidebar-btn-group">
-               <a href="index.php?route=login" class="sidebar-btn">Login</a>
-               <a href="index.php?route=register" class="sidebar-btn">Register</a>
-            </div>
-         </div>
-         <?php } ?>
-      </div>
-
-      <div class="sidebar-box">
-         <div class="sidebar-title">
-            <span>Categories</span>
-         </div>
-         <div class="sidebar-content">
-            <a href="index.php?route=category&category=nature" class="sidebar-item">Nature</a>
-            <a href="index.php?route=category&category=education" class="sidebar-item">Education</a>
-            <a href="index.php?route=category&category=business" class="sidebar-item">Business</a>
-            <a href="index.php?route=category&category=travel" class="sidebar-item">Travel</a>
-            <a href="index.php?route=category&category=news" class="sidebar-item">News</a>
-            <a href="index.php?route=category&category=gaming" class="sidebar-item">Gaming</a>
-            <a href="index.php?route=category&category=sports" class="sidebar-item">Sports</a>
-            <a href="index.php?route=category&category=design" class="sidebar-item">Design</a>
-            <a href="index.php?route=category&category=fashion" class="sidebar-item">Fashion</a>
-            <a href="index.php?route=category&category=personal" class="sidebar-item">Personal</a>
-            <a href="index.php?route=categories" class="sidebar-item view-all">> View All</a>
-         </div>
-      </div>
-
-      <div class="sidebar-box">
-         <div class="sidebar-title">
-            <span>Authors</span>
-         </div>
-         <div class="sidebar-content">
-            <?php
-               if(!empty($authors)){
-                  foreach($authors as $author_name) { 
-            ?>
-            <a href="index.php?route=author&author=<?= $author_name; ?>" class="sidebar-item"><?= $author_name; ?></a>
-            <?php } ?>
-            <a href="index.php?route=authors" class="sidebar-item view-all">> View All</a>
-            <?php } else { ?>
-            <p class="sidebar-empty">no posts added yet!</p>
-            <?php } ?>  
-         </div>
-      </div>
-   </aside>
-
-   <main class="home-main">
-      <div class="main-header">
-         <h1 class="main-title">Today Trending</h1>
-      </div>
+<section class="form-container">
+   <form action="index.php?route=login" method="post" id="loginForm">
+      <h3>Login</h3>
       
-      <div class="posts-grid">
       <?php
-         if(!empty($posts)){
-            foreach($posts as $fetch_posts){
-               $post_id = $fetch_posts['id'];
-      ?>
-      <form class="box" method="post">
-         <input type="hidden" name="post_id" value="<?= $post_id; ?>">
-         <input type="hidden" name="admin_id" value="<?= $fetch_posts['admin_id']; ?>">
-         <div class="post-admin">
-            <span style="font-weight: bold;">👤</span>
-            <div>
-               <a href="index.php?route=author&author=<?= $fetch_posts['name']; ?>"><?= $fetch_posts['name']; ?></a>
-               <div><?= $fetch_posts['date']; ?></div>
-            </div>
-         </div>
-         
-         <?php if($fetch_posts['image'] != ''){ ?>  
-         <img src="<?php echo BASE_URL . UPLOADED_IMG_URL . $fetch_posts['image']; ?>" class="post-image" alt="">
-         <?php } ?>
-         
-         <div class="post-title"><?= $fetch_posts['title']; ?></div>
-         <div class="post-content content-150"><?= substr($fetch_posts['content'], 0, 150); ?>...</div>
-         <a href="index.php?route=post&post_id=<?= $post_id; ?>" class="inline-btn">read more</a>
-         <a href="index.php?route=category&category=<?= $fetch_posts['category']; ?>" class="post-cat"> <span><?= $fetch_posts['category']; ?></span></a>
-         <div class="icons">
-            <a href="index.php?route=post&post_id=<?= $post_id; ?>"><span style="font-weight: bold;">💬</span><span>(<?= $fetch_posts['comments_count']; ?>)</span></a>
-            <button type="button" onclick="likePost(this, <?= $post_id; ?>, <?= $fetch_posts['admin_id']; ?>)"><span style="font-weight: bold; <?php if($fetch_posts['has_liked']){ echo 'color:var(--red);'; } ?>">❤</span><span>(<?= $fetch_posts['likes_count']; ?>)</span></button>
-         </div>
-      </form>
-         <?php
-            }
-         } else {
-            echo '<p class="empty">no posts added yet!</p>';
+      if(!empty($message)){
+         foreach($message as $msg){
+            echo '<div class="message" style="background: #dc3545; color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: center;">
+               <span>'.$msg.'</span>
+            </div>';
          }
-         ?>
+      }
+      ?>
+      
+      <div class="login-tabs">
+         <button type="button" class="tab-btn active" data-tab="user">User Login</button>
+         <a href="index.php?route=admin&action=login" class="tab-btn" style="text-decoration: none; display: inline-block;">Admin Login</a>
       </div>
       
-      <div class="more-btn" style="text-align: center; margin-top:2rem;">
-         <a href="index.php?route=posts" class="inline-btn">view all posts</a>
+      <input type="hidden" name="login_type" id="login_type" value="user">
+      
+      <div id="user-login" class="tab-content active">
+         <label>Username</label>
+         <input type="text" name="name" id="user_name" required placeholder="Enter your username" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
+         <label>Password</label>
+         <input type="password" name="user_pass" id="user_pass" required placeholder="Enter your password" class="box" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')">
       </div>
-   </main>
-</div>
+      
+      <div id="admin-login" class="tab-content" style="display: none;">
+         <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: center;">
+            <p style="color: #856404; font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;">⚠️ Admin login has been moved to a dedicated panel</p>
+            <a href="index.php?route=admin&action=login" class="btn" style="margin-top: 0.5rem; display: inline-block; padding: 0.8rem 2rem;">Go to Admin Login Panel</a>
+         </div>
+      </div>
+      
+      <input type="submit" value="Login" name="submit" class="btn">
+      <p>Don't have an account? <a href="index.php?route=register">Sign Up</a></p>
+      <p style="margin-top: 1rem;"><a href="index.php?route=admin&action=login" style="color: var(--main-color); font-weight: bold;">Go to Admin Login Panel</a></p>
+   </form>
+</section>
+
+<script>
+function switchTab(tab) {
+   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+   document.querySelectorAll('.tab-content').forEach(c => {
+      c.classList.remove('active');
+      c.style.display = 'none';
+   });
+   
+   document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+   var activeTab = document.getElementById(tab + '-login');
+   activeTab.classList.add('active');
+   activeTab.style.display = 'block';
+   document.getElementById('login_type').value = tab;
+   
+   if(tab === 'user') {
+      document.getElementById('user_name').required = true;
+      document.getElementById('user_pass').required = true;
+      document.getElementById('admin_name').required = false;
+      document.getElementById('admin_pass').required = false;
+   } else {
+      document.getElementById('user_name').required = false;
+      document.getElementById('user_pass').required = false;
+      document.getElementById('admin_name').required = true;
+      document.getElementById('admin_pass').required = true;
+   }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+   switchTab('user');
+   
+   document.querySelectorAll('.tab-btn[data-tab]').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+         var tab = this.getAttribute('data-tab');
+         if(tab) {
+            switchTab(tab);
+         }
+      });
+   });
+   
+   document.getElementById('loginForm').addEventListener('submit', function(e) {
+      var loginType = document.getElementById('login_type').value;
+      
+      if(loginType === 'user') {
+         var userPass = document.getElementById('user_pass').value;
+         var userName = document.getElementById('user_name').value;
+         
+         var passInput = document.createElement('input');
+         passInput.type = 'hidden';
+         passInput.name = 'pass';
+         passInput.value = userPass;
+         this.appendChild(passInput);
+         
+         document.getElementById('admin_name').removeAttribute('name');
+         document.getElementById('admin_pass').removeAttribute('name');
+      } else {
+         var adminPass = document.getElementById('admin_pass').value;
+         var adminName = document.getElementById('admin_name').value;
+         
+         var passInput = document.createElement('input');
+         passInput.type = 'hidden';
+         passInput.name = 'pass';
+         passInput.value = adminPass;
+         this.appendChild(passInput);
+         
+         var nameInput = document.createElement('input');
+         nameInput.type = 'hidden';
+         nameInput.name = 'name';
+         nameInput.value = adminName;
+         this.appendChild(nameInput);
+         
+         document.getElementById('user_name').removeAttribute('name');
+         document.getElementById('user_pass').removeAttribute('name');
+      }
+   });
+});
+</script>
 
 <?php include __DIR__ . '/../../components/footer.php'; ?>
 <script src="<?php echo ASSETS_URL; ?>js/script.js"></script>
