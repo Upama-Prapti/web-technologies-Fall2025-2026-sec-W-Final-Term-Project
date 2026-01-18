@@ -12,7 +12,6 @@ $is_superadmin = ($current_admin_name == SUPERADMIN_USERNAME);
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Admin Accounts</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>css/admin_style.css">
 </head>
 <body>
@@ -52,11 +51,11 @@ $is_superadmin = ($current_admin_name == SUPERADMIN_USERNAME);
       <p> username : <span><?= $fetch_accounts['name']; ?></span> </p>
       <p> total posts : <span><?= $fetch_accounts['posts_count']; ?></span> </p>
       <?php if($is_superadmin_account){ ?>
-      <p style="color: #ffd700; font-size: 1.2rem; margin-top: 0.5rem;"><i class="fas fa-crown"></i> Super Admin</p>
+      <p style="color: #ffd700; font-size: 1.2rem; margin-top: 0.5rem;">👑 Super Admin</p>
       <?php } elseif(!$is_registered_admin){ ?>
-      <p style="color: #17a2b8; font-size: 1.2rem; margin-top: 0.5rem;"><i class="fas fa-user-check"></i> User Admin</p>
+      <p style="color: #17a2b8; font-size: 1.2rem; margin-top: 0.5rem;">✓ User Admin</p>
       <?php } else { ?>
-      <p style="color: #28a745; font-size: 1.2rem; margin-top: 0.5rem;"><i class="fas fa-user-shield"></i> Registered Admin</p>
+      <p style="color: #28a745; font-size: 1.2rem; margin-top: 0.5rem;">🛡️ Registered Admin</p>
       <?php } ?>
       
       <?php if($is_superadmin && !$is_superadmin_account){ ?>
